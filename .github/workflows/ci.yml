@@ -14,7 +14,7 @@ jobs:
       # Currently uses Docker Hub, so no registry info is needed
       # DOCKER_REGISTRY: YOUR_REGISTY
     
-      DOCKER_USER: $DOCKER_USER
+      DOCKER_USER: ${{ vars.DOCKER_USER }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
@@ -41,8 +41,8 @@ jobs:
           # registry: YOUR_REGISTY
 
           # Username used to log against the Docker registry
-          username: $DOCKER_USER
+          username: ${{ env.DOCKER_USER }}
           # Password or personal access token used to log against the Docker registry
-          password: $DOCKER_PASSWORD
+          password: ${{ env.DOCKER_PASSWORD }}
           
       
