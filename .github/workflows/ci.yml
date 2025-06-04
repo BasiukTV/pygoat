@@ -3,7 +3,7 @@ name: CI-Pipeline
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -41,8 +41,8 @@ jobs:
           # registry: YOUR_REGISTY
 
           # Username used to log against the Docker registry
-          username: "$DOCKER_USER"
+          username: $DOCKER_USER
           # Password or personal access token used to log against the Docker registry
-          password: "$DOCKER_PASSWORD"
+          password: $DOCKER_PASSWORD
           
       
