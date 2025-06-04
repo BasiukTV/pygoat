@@ -16,6 +16,7 @@ jobs:
     
       DOCKER_USER: ${{ vars.DOCKER_USER }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
 
     steps:
       - name: Checkout code
@@ -45,4 +46,8 @@ jobs:
           # Password or personal access token used to log against the Docker registry
           password: ${{ env.DOCKER_PASSWORD }}
           
-      
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ env.DOCKER_USER }}/${{ env.DOCKER_IMAGE_NAME }}:latest      
