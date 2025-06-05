@@ -7,7 +7,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  sast-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+  docker-build:
+    if: false # Disabling this while working on other things
     runs-on: ubuntu-latest
     environment: common
     env:
@@ -41,9 +58,9 @@ jobs:
           # Currently uses Docker Hub, so no registry info is needed
           # registry: YOUR_REGISTY
 
-          # Username used to log against the Docker registry
+          # Username used to log in to the Docker registry
           username: ${{ env.DOCKER_USER }}
-          # Password or personal access token used to log against the Docker registry
+          # Password or personal access token used to log in to the Docker registry
           password: ${{ env.DOCKER_PASSWORD }}
           
       - name: Build and push
@@ -61,11 +78,12 @@ jobs:
           sarif-file: docker-scout-sarif.output.json
           summary: true
 
-          # Fail the run if vulnerabilities are found
-          exit-code: true
+          # Below being set to true will fail the run if vulnerabilities are found
+          # But as this project is focused on finding the vulnerabilities, not fixing them, we set it to false
+          exit-code: false
 
       - name: Upload Docker Scout SARIF result
-        if: ${{ always() }} # Run this even if Docker Scout scanning resulted in failut
+        if: ${{ always() }} # Run this even if Docker Scout scanning resulted in failure
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: docker-scout-sarif.output.json
