@@ -33,6 +33,11 @@ jobs:
             -Dsonar.organization=basiuktv
             -Dsonar.projectKey=BasiukTV_pygoat
 
+      - name: Add SonarQube Quality Gate Badge
+        run: |
+          echo "## SonarQube Scan" >> $GITHUB_STEP_SUMMARY
+          echo "[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=BasiukTV_pygoat)](https://sonarcloud.io/summary/new_code?id=BasiukTV_pygoat)" >> $GITHUB_STEP_SUMMARY
+
   docker-build:
     if: false # Disabling this while working on other things
     runs-on: ubuntu-latest
