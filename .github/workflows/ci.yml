@@ -118,7 +118,7 @@ jobs:
         with:
           scan-ref: ${{ env.TF_HOME }}
           scan-type: 'config'
-          hide-progress: true
+          hide-progress: false
           format: 'sarif'
           output: 'trivy-results.sarif'
           exit-code: '1'
