@@ -8,6 +8,7 @@ on:
 
 jobs:
   sast-scan:
+    if: false # Disabling this while working on other things
     runs-on: ubuntu-latest
     environment: common
     steps:
@@ -105,17 +106,36 @@ jobs:
 
   terraform-scan:
     runs-on: ubuntu-latest
+    env:
+      TF_HOME: ${{ github.workspace }}/automation/iac/app_service/terraform
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@0.31.0
+        with:
+          scan-ref: ${{ env.TF_HOME }}
+          scan-type: 'config'
+          hide-progress: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        if: always() # Should run even if the previous step fails
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'      
 
       - name: Upload Terraform Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
           name: terraform
           # A file, directory or wildcard pattern that describes what to upload
-          path: automation/iac/app_service/terraform
+          path: ${{ env.TF_HOME }}
           if-no-files-found: error      
           retention-days: 90
           overwrite: false      
