@@ -102,3 +102,22 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: docker-scout-sarif.output.json
+
+  terraform-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Upload Terraform Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: terraform
+          # A file, directory or wildcard pattern that describes what to upload
+          path: automation/iac/app_service/terraform
+          if-no-files-found: error      
+          retention-days: 90
+          overwrite: false      
+          include-hidden-files: true # just a safeguard for passing .terraform into artifacts
+                
