@@ -9,11 +9,11 @@ terraform {
 
   # This block is used to configure Terraform Cloud
   cloud {
-    organization = "taras-clp" 
+    organization = "taras-clp"
     workspaces {
       # Compy and modify the following line to use a specific workspace for your user
       # name = "dev-<user>"
       name = "dev-taras"
-    } 
+    }
   }
 }
