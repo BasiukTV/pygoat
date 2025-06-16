@@ -1,10 +1,10 @@
-name: CD Pipeline
+name: CD-Pipeline
 
 on:
   # We will trigger this pipeline manually, or from the CI pipeline
   workflow_dispatch:
     inputs:
-      ci-run-id:
+      ci_run_id:
         description: 'Run Id of the CI pipeline used to find the artifacts'
         required: true
 
@@ -12,9 +12,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Test step
-        run: |
-          echo 'Hello world!'
+      - name: Download the Terraform Artifact
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: terraform
+          run-id: ${{ github.event.inputs.ci_run_id }}
+
+      - name: Verify Terraform Artifact Contents
+        run: ls terraform/
 
   prod:
     needs: [test]
