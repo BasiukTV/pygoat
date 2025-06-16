@@ -1,0 +1,25 @@
+name: CD Pipeline
+
+on:
+  # We will trigger this pipeline manually, or from the CI pipeline
+  workflow_dispatch:
+    inputs:
+      ci-run-id:
+        description: 'Run Id of the CI pipeline used to find the artifacts'
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test step
+        run: |
+          echo 'Hello world!'
+
+  prod:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test step
+        run: |
+          echo 'Hello world!'
