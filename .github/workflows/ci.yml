@@ -104,6 +104,7 @@ jobs:
 
   terraform-scan:
     runs-on: ubuntu-latest
+    environment: common
     env:
       TF_HOME: ${{ github.workspace }}/automation/iac/app_service/terraform
 
