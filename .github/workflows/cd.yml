@@ -11,16 +11,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      TF_HOME: terraform
     steps:
       - name: Download the Terraform Artifact
         uses: actions/download-artifact@v4.3.0
         with:
           name: terraform
+          path: ${{ env.TF_HOME }}
           run-id: ${{ github.event.inputs.ci_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify Terraform Artifact Contents
-        run: ls terraform/
+        run: ls ${{ env.TF_HOME }}
 
   prod:
     needs: [test]
