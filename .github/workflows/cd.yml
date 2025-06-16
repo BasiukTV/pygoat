@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download the Terraform Artifact
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v4.6.2
         with:
           name: terraform
           run-id: ${{ github.event.inputs.ci_run_id }}
