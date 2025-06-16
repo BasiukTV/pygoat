@@ -153,5 +153,4 @@ jobs:
           if-no-files-found: error      
           retention-days: 90
           overwrite: false      
-          include-hidden-files: true # just a safeguard for passing .terraform into artifacts
-                
+          include-hidden-files: false # just a safeguard against passing .terraform into artifacts
