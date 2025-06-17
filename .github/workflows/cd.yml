@@ -11,6 +11,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    uses: common # For access to ${{ secrets.TF_API_TOKEN }}
     env:
       TF_HOME: terraform
     steps:
@@ -25,6 +26,20 @@ jobs:
       - name: Verify Terraform Artifact Contents
         run: ls ${{ env.TF_HOME }}
 
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          # The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file.
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Apply Terraform
+        run: |
+          cd ${{ env.TF_HOME }}
+          terraform init
+          terraform workspace select pygoat-test
+          terraform apply -auto-approve
+          cd -
+  
   prod:
     needs: [test]
     runs-on: ubuntu-latest
