@@ -36,8 +36,8 @@ jobs:
         run: |
           cd ${{ env.TF_HOME }}
           terraform init
-          terraform workspace select pygoat-test
-          terraform apply -auto-approve
+          terraform workspace select pygoat-test || terraform workspace new pygoat-test
+          terraform apply -input=false -auto-approve
           cd -
   
   prod:
