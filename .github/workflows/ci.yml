@@ -122,6 +122,7 @@ jobs:
       - name: Terraform Format & Validate Check
         run: |
           cd $TF_HOME
+          export TF_WORKSPACE="pygoat-test"
           terraform init
           terraform fmt -check
           terraform validate
