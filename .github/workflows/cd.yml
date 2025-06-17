@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    uses: common # For access to ${{ secrets.TF_API_TOKEN }}
+    environment: common # For access to ${{ secrets.TF_API_TOKEN }}
     env:
       TF_HOME: terraform
     steps:
