@@ -10,10 +10,11 @@ terraform {
   # This block is used to configure Terraform Cloud
   cloud {
     organization = "taras-clp"
-    workspaces {
-      # Compy and modify the following line to use a specific workspace for your user
-      # name = "dev-<user>"
-      name = "dev-taras"
-    }
+
+    # Workspaces selection is done via TF_WORKSPACE variable
+    # Set it to dev-<user> for local development
+    # workspaces {
+    #   name = "dev-<user>"
+    # }
   }
 }
