@@ -25,9 +25,9 @@ COPY . /app/
 
 
 # install pygoat
-EXPOSE 8000
+EXPOSE 80
 
 
 RUN python3 /app/manage.py migrate
 WORKDIR /app
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers","6", "pygoat.wsgi"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers","6", "pygoat.wsgi"]
