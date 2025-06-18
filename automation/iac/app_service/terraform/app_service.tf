@@ -33,6 +33,7 @@ module "avm_res_web_site" {
   }
 
   site_config = {
-    always_on = false
+    linux_fx_version = "DOCKER"
+    always_on        = true
   }
 }
