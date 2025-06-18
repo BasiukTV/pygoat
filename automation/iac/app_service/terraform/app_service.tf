@@ -33,7 +33,6 @@ module "avm_res_web_site" {
   }
 
   site_config = {
-    always_on      = false
-    python_version = var.python_version
+    always_on = false
   }
 }

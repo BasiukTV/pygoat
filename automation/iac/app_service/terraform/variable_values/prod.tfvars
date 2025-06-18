@@ -1,2 +1,2 @@
 stage = "prod"
-region = "eastus3"
+region = "westus3"

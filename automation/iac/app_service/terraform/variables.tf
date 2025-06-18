@@ -30,9 +30,3 @@ variable "enable_telemetry" {
   type        = bool
   default     = false
 }
-
-variable "python_version" {
-  description = "The version of Python to use in the App Service."
-  type        = string
-  default     = "3.12"
-}
