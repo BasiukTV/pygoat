@@ -23,9 +23,6 @@ jobs:
           run-id: ${{ github.event.inputs.ci_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Verify Terraform Artifact Contents
-        run: ls ${{ env.TF_HOME }}
-
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
         with:
@@ -43,7 +40,28 @@ jobs:
   prod:
     needs: [test]
     runs-on: ubuntu-latest
+    environment: common # For access to ${{ secrets.TF_API_TOKEN }}
+    env:
+      TF_HOME: terraform
     steps:
-      - name: Test step
+      - name: Download the Terraform Artifact
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: terraform
+          path: ${{ env.TF_HOME }}
+          run-id: ${{ github.event.inputs.ci_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          # The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file.
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Apply Terraform
         run: |
-          echo 'Hello world!'
+          cd ${{ env.TF_HOME }}
+          export TF_WORKSPACE="pygoat-prod"
+          terraform init
+          terraform apply -var-file=./variable_values/prod.tfvars -input=false -auto-approve
+          cd -
