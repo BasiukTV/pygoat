@@ -44,9 +44,6 @@ jobs:
         uses: Azure/login@v2.3.0
         with:
           creds: ${{ secrets.ARM_CLIENT_SECRET}}
-          client-id: ${{ vars.ARM_CLIENT_ID }}
-          tenant-id: ${{ vars.ARM_TENANT }}
-          subscription-id: ${{ vars.ARM_SUBSCRIPTION }}
 
       - name: Deploy to AppService
         uses: Azure/cli@v2.1.0
@@ -95,9 +92,6 @@ jobs:
         uses: Azure/login@v2.3.0
         with:
           creds: ${{ secrets.ARM_CLIENT_SECRET}}
-          client-id: ${{ vars.ARM_CLIENT_ID }}
-          tenant-id: ${{ vars.ARM_TENANT }}
-          subscription-id: ${{ vars.ARM_SUBSCRIPTION }}
 
       - name: Deploy to AppService
         uses: Azure/cli@v2.1.0
