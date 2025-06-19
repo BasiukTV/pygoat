@@ -16,6 +16,7 @@ jobs:
       TF_HOME: terraform
     steps:
       - name: Download the Terraform Artifact
+        if: false # disbling while woring on something else
         uses: actions/download-artifact@v4.3.0
         with:
           name: terraform
@@ -24,12 +25,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: HashiCorp - Setup Terraform
+        if: false # disbling while woring on something else
         uses: hashicorp/setup-terraform@v2.0.3
         with:
           # The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file.
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Apply Terraform
+        if: false # disbling while woring on something else
         run: |
           cd ${{ env.TF_HOME }}
           export TF_WORKSPACE="pygoat-test"
@@ -40,12 +43,12 @@ jobs:
       - name: Azure Login
         uses: Azure/login@v2.3.0
         with:
-          creds: ${{ secrets.ARM_CLIENT_SECRET }}
+          creds: "${{ secrets.ARM_CLIENT_SECRET }}"
           client-id: ${{ vars.ARM_CLIENT_ID }}
           tenant-id: ${{ vars.ARM_TENANT }}
           subscription-id: ${{ vars.ARM_SUBSCRIPTION }}
 
-      - name: Azure CLI Action
+      - name: Deploy to AppService
         uses: Azure/cli@v2.1.0
         with:
           ## --docker-custom-image-name value should render to something like tbeit/pygoat:15741277530
@@ -64,6 +67,7 @@ jobs:
       TF_HOME: terraform
     steps:
       - name: Download the Terraform Artifact
+        if: false # disbling while woring on something else
         uses: actions/download-artifact@v4.3.0
         with:
           name: terraform
@@ -72,12 +76,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: HashiCorp - Setup Terraform
+        if: false # disbling while woring on something else
         uses: hashicorp/setup-terraform@v2.0.3
         with:
           # The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file.
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Apply Terraform
+        if: false # disbling while woring on something else
         run: |
           cd ${{ env.TF_HOME }}
           export TF_WORKSPACE="pygoat-prod"
@@ -88,12 +94,12 @@ jobs:
       - name: Azure Login
         uses: Azure/login@v2.3.0
         with:
-          creds: ${{ secrets.ARM_CLIENT_SECRET }}
+          creds: "${{ secrets.ARM_CLIENT_SECRET }}"
           client-id: ${{ vars.ARM_CLIENT_ID }}
           tenant-id: ${{ vars.ARM_TENANT }}
           subscription-id: ${{ vars.ARM_SUBSCRIPTION }}
 
-      - name: Azure CLI Action
+      - name: Deploy to AppService
         uses: Azure/cli@v2.1.0
         with:
           ## --docker-custom-image-name value should render to something like tbeit/pygoat:15741277530
