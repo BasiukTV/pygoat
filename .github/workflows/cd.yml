@@ -52,7 +52,7 @@ jobs:
           inlineScript: |
             az webapp config container set \
               --name app-taras-devsecoppapp-test-westus \
-              --resource-group rg-taras-devsecoppapp-test-westus \ 
+              --resource-group rg-taras-devsecoppapp-test-westus \
               --docker-custom-image-name ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }} \
               --docker-registry-server-url https://index.docker.io/v1
   
@@ -100,6 +100,6 @@ jobs:
           inlineScript: |
             az webapp config container set \
               --name app-taras-devsecoppapp-prod-eastus2 \
-              --resource-group rg-taras-devsecoppapp-prod-eastus2 \ 
+              --resource-group rg-taras-devsecoppapp-prod-eastus2 \
               --docker-custom-image-name ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }} \
               --docker-registry-server-url https://index.docker.io/v1
