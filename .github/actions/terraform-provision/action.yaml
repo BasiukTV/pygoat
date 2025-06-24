@@ -11,13 +11,16 @@ inputs:
     required: false
     default: terraform
     description: Terraform directory
+  tf_api_token:
+    required: true
+    description: Terraform Cloud API token for authentication
 runs:
   using: "composite"
   steps:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2.0.3
       with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        cli_config_credentials_token: ${{ inputs.tf_api_token }}
 
     - name: Apply Terraform
       run: |

@@ -10,13 +10,16 @@ inputs:
   docker_image:
     required: true
     description: Full Docker image name with tag
+  arm_client_secret:
+    required: true
+    description: Azure ARM client secret for authentication
 runs:
   using: "composite"
   steps:
     - name: Azure Login
       uses: Azure/login@v2.3.0
       with:
-        creds: ${{ secrets.ARM_CLIENT_SECRET }}
+        creds: ${{ inputs.arm_client_secret }}
 
     - name: Deploy Container
       uses: Azure/cli@v2.1.0

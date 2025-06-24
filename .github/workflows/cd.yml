@@ -31,6 +31,7 @@ jobs:
         with:
           workspace: pygoat-test
           tfvars: ./variable_values/test.tfvars
+          tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Deploy to AppService
         uses: ./.github/actions/deploy-appservice
@@ -38,6 +39,7 @@ jobs:
           app_name: app-taras-devsecoppapp-test-westus
           resource_group: rg-taras-devsecoppapp-test-westus
           docker_image: ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }}
+          arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
 
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.14.0
@@ -71,6 +73,7 @@ jobs:
         with:
           workspace: pygoat-prod
           tfvars: ./variable_values/prod.tfvars
+          tf_api_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Deploy to AppService
         uses: ./.github/actions/deploy-appservice
@@ -78,3 +81,4 @@ jobs:
           app_name: app-taras-devsecoppapp-prod-eastus2
           resource_group: rg-taras-devsecoppapp-prod-eastus2
           docker_image: ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }}
+          arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
