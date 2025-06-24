@@ -15,6 +15,9 @@ jobs:
     env:
       TF_HOME: terraform
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Download the Terraform Artifact
         uses: actions/download-artifact@v4.3.0
         with:
@@ -23,35 +26,18 @@ jobs:
           run-id: ${{ github.event.inputs.ci_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: HashiCorp - Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.3
+      - name: Terraform Provision
+        uses: ./.github/actions/terraform-provision
         with:
-          # The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file.
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      - name: Apply Terraform
-        run: |
-          cd ${{ env.TF_HOME }}
-          export TF_WORKSPACE="pygoat-test"
-          terraform init
-          terraform apply -var-file=./variable_values/test.tfvars -input=false -auto-approve
-          cd -
-
-      - name: Azure Login
-        uses: Azure/login@v2.3.0
-        with:
-          creds: ${{ secrets.ARM_CLIENT_SECRET}}
+          workspace: pygoat-test
+          tfvars: ./variable_values/test.tfvars
 
       - name: Deploy to AppService
-        uses: Azure/cli@v2.1.0
+        uses: ./.github/actions/deploy-appservice
         with:
-          ## --docker-custom-image-name value should render to something like tbeit/pygoat:15741277530
-          inlineScript: |
-            az webapp config container set \
-              --name app-taras-devsecoppapp-test-westus \
-              --resource-group rg-taras-devsecoppapp-test-westus \
-              --docker-custom-image-name ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }} \
-              --docker-registry-server-url https://index.docker.io/v1
+          app_name: app-taras-devsecoppapp-test-westus
+          resource_group: rg-taras-devsecoppapp-test-westus
+          docker_image: ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }}
 
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.14.0
@@ -69,6 +55,9 @@ jobs:
     env:
       TF_HOME: terraform
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Download the Terraform Artifact
         uses: actions/download-artifact@v4.3.0
         with:
@@ -77,32 +66,15 @@ jobs:
           run-id: ${{ github.event.inputs.ci_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: HashiCorp - Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.3
+      - name: Terraform Provision
+        uses: ./.github/actions/terraform-provision
         with:
-          # The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file.
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      - name: Apply Terraform
-        run: |
-          cd ${{ env.TF_HOME }}
-          export TF_WORKSPACE="pygoat-prod"
-          terraform init
-          terraform apply -var-file=./variable_values/prod.tfvars -input=false -auto-approve
-          cd -
-
-      - name: Azure Login
-        uses: Azure/login@v2.3.0
-        with:
-          creds: ${{ secrets.ARM_CLIENT_SECRET}}
+          workspace: pygoat-prod
+          tfvars: ./variable_values/prod.tfvars
 
       - name: Deploy to AppService
-        uses: Azure/cli@v2.1.0
+        uses: ./.github/actions/deploy-appservice
         with:
-          ## --docker-custom-image-name value should render to something like tbeit/pygoat:15741277530
-          inlineScript: |
-            az webapp config container set \
-              --name app-taras-devsecoppapp-prod-eastus2 \
-              --resource-group rg-taras-devsecoppapp-prod-eastus2 \
-              --docker-custom-image-name ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }} \
-              --docker-registry-server-url https://index.docker.io/v1
+          app_name: app-taras-devsecoppapp-prod-eastus2
+          resource_group: rg-taras-devsecoppapp-prod-eastus2
+          docker_image: ${{ vars.DOCKER_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.inputs.ci_run_id }}
